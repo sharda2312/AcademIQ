@@ -1,0 +1,50 @@
+{% extends 'nav.html' %}
+
+{% block title %}Quiz Created{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background:  #272d37;
+        color: white;
+        text-align: center;
+    }
+    .container {
+        margin-top: 10%;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+    .btn-copy {
+        background-color: #ff6b6b;
+        border: none;
+    }
+    .btn-copy:hover {
+        background-color: #ff4757;
+    }
+</style>
+
+<div class="container">
+    <h1 class="fw-bold">Quiz Created Successfully!</h1>
+    <p class="fs-4">Jion with this code to Attempt the quiz:</p>
+    
+    <div class="input-group mb-3">
+        <input type="text" class="form-control text-center" id="quizCode" value="{{ quiz_code }}" readonly>
+        <button class="btn btn-copy" onclick="copyCode()">Copy</button>
+    </div>
+
+</div>
+
+<script>
+    function copyCode() {
+        var copyText = document.getElementById("quizCode");
+        copyText.select();
+        document.execCommand("copy");
+        alert("Quiz code copied: " + copyText.value);
+    }
+</script>
+
+
+{% endblock %}
+

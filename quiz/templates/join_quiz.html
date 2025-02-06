@@ -1,0 +1,43 @@
+{% extends 'nav.html' %}
+{% block title %}Join Quiz - AcademIQ{% endblock %}
+{% block content %}
+
+
+<style>
+    body {
+        background:  #272d37;
+        color: white;
+    }
+    .container {
+        margin-top: 2%;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .btn-custom {
+        background-color: #ff6b6b;
+        border: none;
+    }
+    .btn-custom:hover {
+        background-color: #ff4757;
+    }
+    label {
+        font-weight: bold;
+    }
+</style>
+
+<div class="container text-white notnav">
+    <h1 class="fw-bold text-center">Join Quiz</h1>
+    
+    <form method="POST" id="quiz">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Enter Quiz Code</label>
+            <input type="text" class="form-control" id="quiz_code" name="quiz_code" required>
+        </div>
+        <button type="submit" class="btn btn-custom">Join Quiz</button>
+    </form>
+    <p id="responseMessage" class="text-center mt-3"></p>
+</div>
+
+{% endblock %}

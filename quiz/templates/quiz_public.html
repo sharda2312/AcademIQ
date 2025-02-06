@@ -1,0 +1,55 @@
+{% extends 'nav.html' %}
+{% block title %}Public Quiz - AcademIQ{% endblock %}
+{% block content %}
+
+<style>
+    body {
+        background:  #272d37;
+        color: white;
+        text-align: center;
+    }
+    .notnav{
+        margin-top: 8%;
+    }
+    .btn-custom {
+        background-color: #ff6b6b;
+        border: none;
+        padding: 12px 20px;
+        font-size: 1.2rem;
+    }
+    .btn-custom:hover {
+        background-color: #ff4757;
+    }
+    .card {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+</style>
+
+<div class="container notnav">
+    <h1 class="fw-bold">Create a Public Quiz</h1>
+    <p class="lead">Use AI to generate quiz questions instantly or add your own manually.</p>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card">
+                <h3>Generate Questions with AI</h3>
+                <p>Let our AI create engaging and challenging questions.</p>
+                <a href="#" class="btn btn-custom">Generate with AI</a>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <h3>Add Your Own Questions</h3>
+                <p>Manually create and customize your quiz questions.</p>
+                <a href="{% url 'manual-quiz' %}" class="btn btn-custom">Add Manually</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

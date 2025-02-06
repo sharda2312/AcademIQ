@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+{% extends 'nav.html' %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Details</title>
+    <style>
+        body {
+           
+            background:  #272d37;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            height: 65vh;
+            font-family: Arial, sans-serif;
+            background: #35393f;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .info {
+            font-size: 18px;
+            color: white;
+            margin: 10px 0;
+            text-align: left;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>📋 Quiz Details</h2>
+        <p class="info"><strong>Title:</strong> <span class="highlight">{{ quiz.title }}</span></p>
+        <p class="info"><strong>Quiz Code:</strong> <span class="highlight">{{ quiz.quiz_code }}</span></p>
+        <p class="info"><strong>Time Duration:</strong> <span class="highlight">{{ quiz.time_limit }} minutes</span></p>
+        <p class="info"><strong>Marking Scheme:</strong> <span class="highlight">{{ quiz.marking_scheme }}</span></p>
+        <p class="info"><strong>Number of Questions:</strong> <span class="highlight">{{ question_count }}</span></p>
+        <p class="info"><strong>Maximum Marks:</strong> <span class="highlight">{{ total_marks }}</span></p>
+        
+        <a href="{% url 'attempt_quiz' quiz.quiz_code %}" class="back-btn">🚀 Start Quiz</a> <br>
+        <a href="{% url 'join_quiz' %}" class="back-btn">🔄 Check Another Quiz</a>
+    </div>
+
+</body>
+
+{% endblock %}
+</html>

@@ -1,0 +1,57 @@
+
+{% extends 'nav.html' %}
+
+{% block title %}AcademIQ{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background:  #272d37;
+        color: white;
+        text-align: center;
+    }
+    nav {
+        background-color: transparent;
+        margin-top: 0%;
+        margin-bottom: 12%;
+    }
+    .btn-custom {
+        background-color: #ff6b6b;
+        border: none;
+    }
+    .btn-custom:hover {
+        background-color: #ff4757;
+    }
+    .dropdown-menu {
+        background-color: #ff6b6b;
+        border: none;
+    }
+    .dropdown-menu a {
+        color: white;
+    }
+    .dropdown-menu a:hover {
+        background-color: #ff4757;
+    }
+</style>
+
+
+<div class="container">
+    <h1 class="fw-bold">Welcome to AcademIQ</h1>
+    <p class="lead">Enhance your learning experience with AI-generated quizzes or manually created quizzes by your teachers.</p>
+    <div class="d-flex justify-content-center mt-4">
+        <div class="dropdown me-3">
+            <button class="btn btn-custom btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Create Quiz
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="quiz-public">Public Quiz</a></li>
+                <li><a class="dropdown-item" href="quiz-self">Self Quiz</a></li>
+            </ul>
+        </div>
+        <a href="join-quiz" class="btn btn-custom btn-lg me-3">Join Quiz</a>
+        <a href="quiz-result" class="btn btn-custom btn-lg">View Results</a>
+    </div>
+</div>
+    
+{% endblock %}
