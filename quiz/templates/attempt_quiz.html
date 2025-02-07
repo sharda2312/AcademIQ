@@ -15,21 +15,41 @@
         }
     </style>
     <script>
-        // Timer Countdown
-        let timeLeft = {{ time_limit }};
-        function updateTimer() {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            document.getElementById("timer").innerText = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            if (timeLeft > 0) {
-                timeLeft--;
-                setTimeout(updateTimer, 1000);
-            } else {
-                document.getElementById("quiz-form").submit();  // Auto-submit on timeout
+        document.addEventListener("DOMContentLoaded", function () {
+            let quiz_code = "{{ quiz.code }}"; // Correctly assign the quiz code
+            let timeLimit = {{ quiz.time_limit }} * 60; // Convert minutes to seconds
+            let startTime = sessionStorage.getItem(`quiz_${quiz_code}_start`);
+
+            if (!startTime) {
+                sessionStorage.setItem(`quiz_${quiz_code}_start`, Date.now());
+                startTime = Date.now();
             }
-        }
-        window.onload = updateTimer;
+    
+            function updateTimer() {
+                let elapsed = Math.floor((Date.now() - startTime) / 1000);
+                let timeLeft = Math.max(timeLimit - elapsed, 0);
+                
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById("timer").innerText = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    
+                if (timeLeft > 0) {
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    document.getElementById("quiz-form").submit();  // Auto-submit on timeout
+                }
+            }
+    
+            updateTimer();
+    
+            // Prevent going back
+            history.pushState(null, null, location.href);
+            window.onpopstate = function () {
+                history.pushState(null, null, location.href);
+            };
+        });
     </script>
+    
 </head>
 
 <body>
@@ -41,7 +61,7 @@
         </div>
         <hr>
         <div class="quiz">
-            <form id="quiz-form" method="POST"  action="">
+            <form id="quiz-form" method="POST" action="{% url 'submit_quiz' quiz.quiz_code %}">
                 {% csrf_token %}
                 {% for question in questions %}
                     <div class="mb-4">
@@ -65,10 +85,11 @@
                     </div>
                 {% endfor %}
                 
+                <!-- Submit button should be inside the form -->
+                <div style="text-align: center; margin-bottom: 5%;">
+                    <button type="submit" class="btn btn-success">Submit Quiz</button>
+                </div>
             </form>
-        </div>
-        <div style="text-align: center; margin-bottom: 5%;"><button type="submit" class="btn btn-success">Submit Quiz</button></div>
         
-    </div>
 </body>
 {% endblock %}

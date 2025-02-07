@@ -1,6 +1,7 @@
 from django.db import models
 import random
 import string
+from authapp.models import User
 
 class Quiz(models.Model):
     title = models.CharField(max_length=200)
@@ -33,11 +34,11 @@ class Quiz(models.Model):
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="questions")
-    question_text = models.CharField(max_length=200)
-    option1 = models.CharField(max_length=200)
-    option2 = models.CharField(max_length=200)
-    option3 = models.CharField(max_length=200)
-    option4 = models.CharField(max_length=200)
+    question_text = models.TextField()
+    option1 = models.CharField(max_length=255)
+    option2 = models.CharField(max_length=255)
+    option3 = models.CharField(max_length=255)
+    option4 = models.CharField(max_length=255)
     
     OPTION_CHOICES = [
         (1, 'Option 1'),
@@ -50,3 +51,18 @@ class Question(models.Model):
 
     def __str__(self):
         return f"{self.quiz.title} - {self.question_text}"
+
+
+class QuizResult(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    total_marks = models.IntegerField()
+    obtained_marks = models.IntegerField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+class UserAnswer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    selected_option = models.IntegerField()
+    is_correct = models.BooleanField()

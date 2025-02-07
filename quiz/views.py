@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404 
 from django.contrib.auth.decorators import login_required
-from .models import Quiz, Question
+from .models import Quiz, Question, QuizResult, UserAnswer
 from django.http  import JsonResponse
 from django.utils.timezone import now
 
@@ -42,6 +42,13 @@ def attempt_quiz(request, quiz_code):
     question_count = quiz.questions.count()
     positive_marks = int(quiz.marking_scheme.split(",")[0].strip("+"))
     total_marks = positive_marks * question_count
+    
+    user = request.user
+    
+    # Check if the user has already submitted
+    if QuizResult.objects.filter(user=user, quiz=quiz).exists():
+        return render(request, 'already_attempted.html')
+
     return render(request, 'attempt_quiz.html', {
         'quiz': quiz,
         'questions': questions,
@@ -97,3 +104,64 @@ def create_manual_quiz(request):
 
 
     return render(request, "create_manual_quiz.html")
+
+
+@login_required
+def submit_quiz(request, quiz_code):
+    quiz = get_object_or_404(Quiz, quiz_code=quiz_code)
+    user = request.user
+
+    # Prevent reattempt
+    if QuizResult.objects.filter(user=user, quiz=quiz).exists():
+        return render(request,"already_attempted.html")
+
+    questions = quiz.questions.all()
+    total_marks = questions.count()
+    obtained_marks = 0
+
+    for question in questions:
+        selected_option = request.POST.get(f'q{question.id}')
+        if selected_option is None:
+            selected_option = 0  # Default value if no answer is selected
+        else:
+            selected_option = int(selected_option)
+
+        is_correct = selected_option == question.correct_option
+
+        # Save user's answer
+        UserAnswer.objects.create(
+            user=user,
+            quiz=quiz,
+            question=question,
+            selected_option=selected_option,
+            is_correct=is_correct
+        )
+
+        if is_correct:
+            obtained_marks += 1
+
+    # Save quiz result
+    result = QuizResult.objects.create(
+        user=user,
+        quiz=quiz,
+        total_marks=total_marks,
+        obtained_marks=obtained_marks,
+        submitted_at=now()
+    )
+    result.save()
+
+    return redirect('result', quiz_code=quiz_code)
+
+@login_required
+def view_result(request, quiz_code):
+    quiz = get_object_or_404(Quiz, quiz_code=quiz_code)
+    user = request.user
+    result = get_object_or_404(QuizResult, user=user, quiz=quiz)
+
+    answers = UserAnswer.objects.filter(user=user, quiz=quiz)
+
+    return render(request, 'result.html', {
+        'quiz': quiz,
+        'result': result,
+        'answers': answers,
+    })
