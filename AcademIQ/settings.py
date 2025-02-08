@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "landing",
     "quiz",
     "result",
-    "authapp"
+    "authapp",
+    "account",
 ]
 
 MIDDLEWARE = [

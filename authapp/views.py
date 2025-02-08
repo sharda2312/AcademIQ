@@ -30,8 +30,8 @@ def register_user(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)  # Parse JSON data
-            
-            name = data.get("name")
+            first_name = data.get("first_name")
+            last_name = data.get("last_name")
             email = data.get("email")
             password = data.get("password")  # In production, hash the password
             dob = data.get("dob")
@@ -46,7 +46,8 @@ def register_user(request):
 
             # Create the user
             user = User.objects.create(
-                name=name,
+                first_name=first_name,
+                last_name=last_name,
                 email=email,
                 password=password,  # Hashing should be used in real apps
                 dob=dob
