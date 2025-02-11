@@ -8,7 +8,6 @@ urlpatterns = [
     path('manual-quiz/', views.create_manual_quiz, name='manual-quiz'),
     path('quiz/<str:quiz_code>/', views.quiz_view, name='quiz_view'),
     path('quiz/<str:quiz_code>/attempt/', views.attempt_quiz, name='attempt_quiz'),
-    path('quiz/<str:quiz_code>/result/', views.view_result, name='result'),
     path('quiz/<str:quiz_code>/submit/', views.submit_quiz, name='submit_quiz'),
 
     # path('quiz', views.quiz, name='quiz'),

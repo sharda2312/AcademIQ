@@ -74,7 +74,7 @@ def login_view(request):
             # Validate password
             if user is not None:  # Correct way to check password
                 login(request, user)  # Storing session manually
-                request.session['user_name'] = user.name
+                request.session['user_name'] = user.first_name
                 return JsonResponse({"status": "success", "message": "Login successful", "redirect_url": "/"})
             else:
                 return JsonResponse({"status": "error", "message": "Invalid email or password"}, status=400)

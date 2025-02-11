@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404 
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Quiz, Question, QuizResult, UserAnswer
 from django.http  import JsonResponse
@@ -152,16 +152,3 @@ def submit_quiz(request, quiz_code):
 
     return redirect('result', quiz_code=quiz_code)
 
-@login_required
-def view_result(request, quiz_code):
-    quiz = get_object_or_404(Quiz, quiz_code=quiz_code)
-    user = request.user
-    result = get_object_or_404(QuizResult, user=user, quiz=quiz)
-
-    answers = UserAnswer.objects.filter(user=user, quiz=quiz)
-
-    return render(request, 'result.html', {
-        'quiz': quiz,
-        'result': result,
-        'answers': answers,
-    })

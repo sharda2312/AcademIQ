@@ -1,3 +1,246 @@
-<div>
-    <p>hi! {{user.name}}</p>
+{% extends 'nav.html' %} {% block content %}
+<style>
+  body {
+    background: #272d37;
+    color: #1f2937;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero-section {
+    background: linear-gradient(135deg, #3e4c63 0%, #3d4455 100%);
+    padding: 4rem 2rem;
+    position: relative;
+  }
+
+  .profile-header {
+    max-width: 1200px;
+    margin: 0 auto;
+    color: white;
+    text-align: left;
+  }
+
+  .profile-info h2 {
+    font-size: 2.5rem;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .profile-info p {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+    opacity: 0.9;
+  }
+
+  .main-content {
+    max-width: 1200px;
+    margin: -60px auto 0;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .info-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .info-card {
+    background: rgb(54, 65, 75);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .info-card h3 {
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .info-item {
+    margin-bottom: 1.5rem;
+  }
+
+  .info-item strong {
+    display: block;
+    color: #64748b;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .info-item span {
+    color: #d2d4d6;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .quiz-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .quiz-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px -1px rgb(0 0 0 / 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+  }
+
+  .quiz-item-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .quiz-score {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-weight: 500;
+  }
+
+  .actions-section {
+    display: flex;
+    gap: 1rem;
+    margin: 3rem 0;
+  }
+
+  .btn {
+    padding: 0.875rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    background: #3b82f6;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #2563eb;
+  }
+
+  .btn-secondary {
+    background: white;
+    color: #1f2937;
+    border: 1px solid #e2e8f0;
+  }
+
+  .btn-secondary:hover {
+    background: #f8fafc;
+  }
+
+  .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-danger:hover {
+    background: #dc2626;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 3rem 1.5rem;
+    }
+
+    .profile-header {
+      text-align: center;
+    }
+
+    .profile-info h2 {
+      font-size: 2rem;
+    }
+
+    .main-content {
+      padding: 0 1rem;
+      margin-top: -40px;
+    }
+
+    .actions-section {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+<div class="hero-section">
+  <div class="profile-header">
+    <div class="profile-info" style="margin-bottom: 3%; margin-left: 5%">
+      <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+      <p>{{ user.email }}</p>
+    </div>
+  </div>
 </div>
+
+<main class="main-content">
+  <div class="info-section">
+    <div class="info-card">
+      <h3>Personal Information</h3>
+      <div class="info-item">
+        <strong>Date of Birth</strong>
+        <span>{{ user.dob|date:"d M Y" }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Account Created</strong>
+        <span>{{ user.date_joined|date:"d M Y" }}</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>Quiz History</h3>
+      <div class="quiz-grid">
+        {% if quizs %} {% for q in quizs|slice:":2" %}
+        <a
+          href="{% url 'result' q.quiz.quiz_code %}"
+          style="text-decoration: none"
+        >
+          <button class="btn btn-light quiz-item">
+            <span class="quiz-item-title">{{ q.quiz.title }}</span>
+            <span class="quiz-score"
+              >{{ q.obtained_marks }}/{{ q.total_marks }}</span
+            >
+          </button>
+        </a>
+        {% endfor %} {% else %}
+        <div class="quiz-item">
+          <span class="quiz-item-title">No quiz attempts yet</span>
+        </div>
+        {% endif %}
+        <div style="display: flex; justify-content: end;">
+            <a href="" style="text-decoration: none; color: #ffffff;" >
+                <button class="btn btn-outline-light btn-small">View All</button>
+            </a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="actions-section">
+    <a href="#" class="btn btn-primary">Edit Profile</a>
+    <a href="#" class="btn btn-secondary">Change Password</a>
+  </div>
+</main>
+{% endblock %}
