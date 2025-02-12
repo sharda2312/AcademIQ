@@ -1,0 +1,14 @@
+{% extends 'nav.html' %}
+
+{% block content %}
+<style>
+
+</style>
+<div style="color: white;">
+    {% for q in quiz %}
+        title : {{q.quiz.title}} <br>
+        obtained_marks: {{q.obtained_marks}} <br>
+        total_marks: {{q.total_marks}} <br>
+    {% endfor %}
+</div>
+{% endblock %}
