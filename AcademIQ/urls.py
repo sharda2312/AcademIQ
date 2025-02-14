@@ -24,5 +24,6 @@ urlpatterns = [
     path("", include("quiz.urls")),
     path("", include("authapp.urls")),
     path("", include("account.urls")),
-    path("", include("result.urls"))
+    path("", include("result.urls")),
+    path("", include("AIquiz.urls")),
 ]

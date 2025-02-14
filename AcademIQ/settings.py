@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "result",
     "authapp",
     "account",
+    "AIquiz",
 ]
 
 MIDDLEWARE = [

@@ -17,7 +17,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let quiz_code = "{{ quiz.code }}"; // Correctly assign the quiz code
-            let timeLimit = {{ quiz.time_limit }} * 60; // Convert minutes to seconds
+            let timeLimit = "{{ quiz.time_limit }}" * 60; // Convert minutes to seconds
             let startTime = sessionStorage.getItem(`quiz_${quiz_code}_start`);
 
             if (!startTime) {
