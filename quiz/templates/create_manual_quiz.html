@@ -4,45 +4,121 @@
 
 <style>
     body {
-        background:  #272d37;
+        background: #272d37;
         color: white;
+        font-family: 'Poppins', sans-serif;
     }
     .container {
         margin-top: 3%;
         background: rgba(255, 255, 255, 0.1);
-        padding: 20px;
-        border-radius: 10px;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
     }
     .btn-custom {
         background-color: #ff6b6b;
         border: none;
+        transition: 0.3s ease-in-out;
     }
     .btn-custom:hover {
         background-color: #ff4757;
+        transform: scale(1.05);
     }
     label {
         font-weight: bold;
     }
+    input, select {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: none;
+    }
+    input:focus, select:focus {
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    .question-card {
+        background: rgba(97, 94, 94, 0.15);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        transition: 0.3s ease-in-out;
+    }
+    .question-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    }
+    .add-question-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 15px;
+        font-size: 1.1em;
+        transition: 0.3s;
+    }
+    .add-question-btn i {
+        margin-right: 5px;
+    }
 </style>
 
+<script>
+    let questionCount = 1;
+    function addQuestion() {
+        questionCount++;
+        let container = document.getElementById("questions-container");
+        let newQuestion = document.createElement("div");
+        newQuestion.classList.add("question-card");
+        newQuestion.innerHTML = `
+            <h5 class="fw-bold">${questionCount}️⃣ Question</h5>
+            <div class="mb-3">
+                <label class="form-label">✏️ Enter Question</label>
+                <input type="text" class="form-control" name="question_text[]" placeholder="Type your question here" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6 d-flex align-items-center mb-2">
+                    <h5 class="me-2">1.</h5>
+                    <input type="text" class="form-control mb-2" name="option1[]" placeholder="Option 1" required>
+                </div>
+                <div class="col-md-6 d-flex align-items-center mb-2">
+                    <h5 class="me-2">2.</h5>
+                    <input type="text" class="form-control mb-2" name="option2[]" placeholder="Option 2" required>
+                </div>
+                <div class="col-md-6 d-flex align-items-center mb-2">
+                    <h5 class="me-2">3.</h5>
+                    <input type="text" class="form-control mb-2" name="option3[]" placeholder="Option 3" required>
+                </div>
+                <div class="col-md-6 d-flex align-items-center mb-2">
+                    <h5 class="me-2">4.</h5>
+                    <input type="text" class="form-control mb-2" name="option4[]" placeholder="Option 4" required>
+                </div>
+            </div>
+            <label class="form-label">✅ Select Correct Option</label>
+            <select class="form-select mb-3" name="correct_option[]" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        `;
+        container.appendChild(newQuestion);
+    }
+</script>
 
 <div class="container text-white">
-    <h1 class="fw-bold text-center">Add Questions Manually</h1>
-    
+    <h1 class="fw-bold text-center mb-4">✍️ Create Manual Quiz</h1>
     <form method="POST">
         {% csrf_token %}
         <div class="mb-3">
-            <label class="form-label">quize title</label>
+            <label class="form-label">📌 Quiz Title</label>
             <input type="text" class="form-control" name="title" required>
         </div>
         <div class="mb-3">
-            <label for="timeDuration" class="form-label">Total Time Duration (in minutes)</label>
-            <input type="number" class="form-control" id="timeDuration" name="time_limit" min="1" placeholder="Enter time in minutes" required>
+            <label class="form-label">⏳ Total Time Duration (in minutes)</label>
+            <input type="number" class="form-control" name="time_limit" min="1" placeholder="Enter time in minutes" required>
         </div>
         
         <div class="mb-3">
-            <label for="markingScheme" class="form-label">Select Marking Scheme</label>
-            <select class="form-select" id="markingScheme" name="marking_scheme" required>
+            <label class="form-label">📊 Select Marking Scheme</label>
+            <select class="form-select" name="marking_scheme" required>
                 <option value="1,0">+1, 0</option>
                 <option value="5,0">+5, 0</option>
                 <option value="4,0">+4, 0</option>
@@ -54,56 +130,53 @@
         </div>
         
         <div id="questions-container">
-        </div>
-        
-        <div class="text-center mt-3">
-            <button type="button" class="btn btn-light" onclick="addQuestion()">+ Add More Question</button>
-        </div>
-        
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-custom btn-lg">Save Quiz</button>
-        </div>
-    </form>
-</div>
-
-<script>
-    let questionCount = 0;
-    function addQuestion() {
-        questionCount++;
-        let container = document.getElementById("questions-container");
-        let newQuestion = document.createElement("div");
-        newQuestion.classList.add("question-block", "mt-3");
-        newQuestion.innerHTML = `
-            <h5 class="fw-bold">${questionCount}. Question</h5>
+            <div class="question-card">
+                <h5 class="fw-bold">{{1}}️⃣ Question</h5>
             <div class="mb-3">
-                <label class="form-label">Enter Question</label>
+                <label class="form-label">✏️ Enter Question</label>
                 <input type="text" class="form-control" name="question_text[]" placeholder="Type your question here" required>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 d-flex align-items-center mb-2">
+                    <h5 class="me-2">1.</h5>
                     <input type="text" class="form-control mb-2" name="option1[]" placeholder="Option 1" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 d-flex align-items-center mb-2">
+                    <h5 class="me-2">2.</h5>
                     <input type="text" class="form-control mb-2" name="option2[]" placeholder="Option 2" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 d-flex align-items-center mb-2">
+                    <h5 class="me-2">3.</h5>
                     <input type="text" class="form-control mb-2" name="option3[]" placeholder="Option 3" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 d-flex align-items-center mb-2">
+                    <h5 class="me-2">4.</h5>
                     <input type="text" class="form-control mb-2" name="option4[]" placeholder="Option 4" required>
                 </div>
             </div>
-            <label class="form-label">Select Correct Option</label>
+            <label class="form-label">✅ Select Correct Option</label>
             <select class="form-select mb-3" name="correct_option[]" required>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
             </select>
-        `;
-        container.appendChild(newQuestion);
-    }
-</script>
-    
+            </div>
+        </div>
+
+        
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-light add-question-btn" onclick="addQuestion()">
+                <i class="fas fa-plus"></i> Add Question Manually
+            </button>
+        </div>
+        
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-custom btn-lg">💾 Save Quiz</button>
+        </div>
+    </form>
+</div>
+
+
 
 {% endblock %}

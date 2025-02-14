@@ -37,7 +37,7 @@
         box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     }
     .question-card {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(97, 94, 94, 0.15);
         padding: 15px;
         border-radius: 10px;
         margin-bottom: 15px;
@@ -61,7 +61,8 @@
 </style>
 
 <div class="container text-white">
-    <h1 class="fw-bold text-center mb-4">📝 Add Questions Manually</h1>
+    <h1 class="fw-bold text-center mb-4">📝 AI Generated Questions</h1>
+    <div style="display: flex; justify-content: center;"><p>You can also make chnages to the Questions and Add Questions Manually.</p></div>
     
     <form method="POST">
         {% csrf_token %}
@@ -105,11 +106,12 @@
                     {% endfor %}
                 </div>
                 <label class="form-label">✅ Select Correct Option</label>
+                <p>The Correct Answer is: {{question.correct|add:1}}</p>
                 <select class="form-select mb-3" name="correct_option[]" required>
-                    <option value="1" {% if question.correct == "1" %}selected{% endif %}>1</option>
-                    <option value="2" {% if question.correct == "2" %}selected{% endif %}>2</option>
-                    <option value="3" {% if question.correct == "3" %}selected{% endif %}>3</option>
-                    <option value="4" {% if question.correct == "4" %}selected{% endif %}>4</option>
+                    <option value="1" {% if question.correct == "0" %}selected{% endif %}>1</option>
+                    <option value="2" {% if question.correct == "1" %}selected{% endif %}>2</option>
+                    <option value="3" {% if question.correct == "2" %}selected{% endif %}>3</option>
+                    <option value="4" {% if question.correct == "3" %}selected{% endif %}>4</option>
                 </select>
             </div>
             {% endfor %}
@@ -117,7 +119,7 @@
         
         <div class="text-center mt-3">
             <button type="button" class="btn btn-light add-question-btn" onclick="addQuestion()">
-                <i class="fas fa-plus"></i> Add More Question
+                <i class="fas fa-plus"></i> Add Question Manually
             </button>
         </div>
         
