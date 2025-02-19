@@ -15,6 +15,7 @@ def ai(request):
     question_count = 4
     grade = 5
     topics = "science"
+    model = "deepseek-r1-distill-llama-70b"
     chat_completion = client.chat.completions.create(
         messages=[
             {
@@ -34,7 +35,7 @@ def ai(request):
                 """,
             }
         ],
-        model="deepseek-r1-distill-llama-70b",
+        model= f"{model}",
     )
 
     # Get AI-generated response

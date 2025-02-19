@@ -92,8 +92,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'AcademIQ',  # Replace with your database name
-        'USER': 'testuser',          # Default XAMPP username
-        'PASSWORD': 'testpassword',          # Leave empty if no password is set in XAMPP
+        'USER': 'user',          # Default XAMPP username
+        'PASSWORD': 'user_password',          # Leave empty if no password is set in XAMPP
         'HOST': 'localhost',     # Use 'localhost' or '127.0.0.1'
         'PORT': '3306'
     }
