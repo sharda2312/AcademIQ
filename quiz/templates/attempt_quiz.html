@@ -48,6 +48,20 @@
                 history.pushState(null, null, location.href);
             };
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('click', function () {
+                if (this.wasChecked) {
+                    this.checked = false;
+                }
+                radioButtons.forEach(r => r.wasChecked = false);
+                this.wasChecked = this.checked;
+            });
+        });
+    });
     </script>
     
 </head>

@@ -1,0 +1,122 @@
+{% extends 'nav.html' %}
+{% block title %}AI Quiz Generator - AcademIQ{% endblock %}
+{% block content %}
+
+<style>
+    body {
+        background: #272d37;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+    }
+    .container {
+        margin-top: 3%;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .btn-custom {
+        background-color: #ff6b6b;
+        border: none;
+        transition: 0.3s ease-in-out;
+        padding: 10px 20px;
+        font-size: 1.1em;
+    }
+    .btn-custom:hover {
+        background-color: #ff4757;
+        transform: scale(1.05);
+    }
+    label {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+    input, select {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        width: 100%;
+        margin-bottom: 10px;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+    input:focus, select:focus {
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        outline: none;
+    }
+    select {
+        background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 30px;
+        color: white;
+    }
+    select option {
+        background-color: #272d37;
+        color: white;
+    }
+</style>
+
+<div class="container text-white">
+    <h1 class="fw-bold text-center mb-4">🎓 AI Quiz Generator</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="questions_count">📏 Question Count</label>
+            <input type="number" name="questions_count" id="questions_count" placeholder="Enter number of questions" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="grade">🎒 Grade</label>
+            <select name="grade" id="grade" required>
+                <option value="5th">5th</option>
+                <option value="6th">6th</option>
+                <option value="7th">7th</option>
+                <option value="8th">8th</option>
+                <option value="9th">9th</option>
+                <option value="10th">10th</option>
+                <option value="11th">11th</option>
+                <option value="12th">12th</option>
+                <option value="Btech">B.Tech</option>
+                <option value="Mtech">M.Tech</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="topics">📚 Topics</label>
+            <input type="text" name="topics" id="topics" placeholder="Enter topics (comma-separated)" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="level">⚙️ Difficulty Level</label>
+            <select name="level" id="level" required>
+                <option value="easy">Easy</option>
+                <option value="moderate">Moderate</option>
+                <option value="hard">Hard</option>
+                <option value="very hard">Very Hard</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="model">🤖 Choose Model</label>
+            <select name="model" id="model" required>
+                <option value="deepseek-r1-distill-llama-70b">DeepSeek R1 Distill LLaMA 70B</option>
+                <option value="llama-3.3-70b-specdec">LLaMA 3.3 70B SpecDec</option>
+                <option value="llama-3.2-90b-vision-preview">LLaMA 3.2 90B Vision Preview</option>
+                <option value="gemma2-9b-it">Gemma2 9B IT</option>
+                <option value="llama-3.1-8b-instant">LLaMA 3.1 8B Instant</option>
+            </select>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-custom">🚀 Generate Quiz</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -8,6 +8,7 @@
 
         <div class="d-flex justify-content-between">
             <p class="fs-5"><strong>Total Marks:</strong> {{ result.total_marks }}</p>
+            <p class="fs-5"><strong>Marking Scheme:</strong> {{ quiz.marking_scheme }}</p>
             <p class="fs-5"><strong>Obtained Marks:</strong> {{ result.obtained_marks }}</p>
         </div>
 
@@ -28,8 +29,11 @@
                     </div>
 
                     <div class="mt-3">
-                        {% if answer.is_correct %}
+                        {% if answer.is_correct and answer.selected_option %}
                             <p class="text-success fw-bold">✅ Your Answer: {{ answer.selected_option }} - Correct!</p>
+                        {%elif not answer.selected_option%}
+                            <p class="text-danger fw-bold">🟠 UnAttempted</p>
+                            <p class="text-warning"><strong>✔ Correct Answer:</strong> {{ answer.question.correct_option }}</p>
                         {% else %}
                             <p class="text-danger fw-bold">❌ Your Answer: {{ answer.selected_option }} - Incorrect</p>
                             <p class="text-warning"><strong>✔ Correct Answer:</strong> {{ answer.question.correct_option }}</p>

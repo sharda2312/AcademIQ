@@ -114,9 +114,16 @@ def submit_quiz(request, quiz_code):
     # Prevent reattempt
     if QuizResult.objects.filter(user=user, quiz=quiz).exists():
         return render(request,"already_attempted.html")
-
+    
     questions = quiz.questions.all()
-    total_marks = questions.count()
+    question_count = quiz.questions.count()
+
+    positive_marks = int(quiz.marking_scheme.split(",")[0].strip("+"))
+    negative_marks = int(quiz.marking_scheme.split(",")[1].strip("-"))
+    
+    print("pos", positive_marks, "nega", negative_marks)
+    total_marks = positive_marks * question_count
+
     obtained_marks = 0
 
     for question in questions:
@@ -137,8 +144,11 @@ def submit_quiz(request, quiz_code):
             is_correct=is_correct
         )
 
-        if is_correct:
-            obtained_marks += 1
+        if is_correct and selected_option:
+            obtained_marks += positive_marks
+        
+        elif selected_option:
+            obtained_marks -= negative_marks
 
     # Save quiz result
     result = QuizResult.objects.create(
