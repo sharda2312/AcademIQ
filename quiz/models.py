@@ -4,9 +4,11 @@ import string
 from authapp.models import User
 
 class Quiz(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, default="self")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     time_limit = models.PositiveIntegerField(help_text="Time limit in minutes", default=10)
+    created_at = models.DateTimeField(auto_now_add=True)
+    question_count = models.PositiveIntegerField(default=5)
     marking_scheme = models.CharField(
         max_length=10,
         choices=[
@@ -16,6 +18,7 @@ class Quiz(models.Model):
         ],
         default="1,0"
     )
+    
     quiz_code = models.CharField(max_length=8, unique=True, blank=False, null=False)  # Ensure it's NOT blank or null
 
     def save(self, *args, **kwargs):

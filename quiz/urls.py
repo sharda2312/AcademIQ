@@ -9,6 +9,7 @@ urlpatterns = [
     path('quiz/<str:quiz_code>/', views.quiz_view, name='quiz_view'),
     path('quiz/<str:quiz_code>/attempt/', views.attempt_quiz, name='attempt_quiz'),
     path('quiz/<str:quiz_code>/submit/', views.submit_quiz, name='submit_quiz'),
+    path('quiz/<str:quiz_code>/questions/', views.quiz_questions, name='questions'),
 
     # path('quiz', views.quiz, name='quiz'),
     # path()

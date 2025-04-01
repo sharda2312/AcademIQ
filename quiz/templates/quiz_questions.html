@@ -1,0 +1,40 @@
+{% extends 'nav.html' %}
+
+{% block content %}
+
+<div class="container mt-4 text-light">
+    <div class="card bg-dark text-light shadow-lg p-4 rounded">
+        <h2 class="text-center fw-bold">{{ quiz.title }}</h2>
+        <hr>
+
+        <div class="d-flex justify-content-between">
+            <p class="fs-5"><strong>Maximum Mark:</strong> {{ max_mark }}</p>
+            <p class="fs-5"><strong>Marking Scheme:</strong> {{ quiz.marking_scheme }}</p>
+        </div>
+        <p class="fs-5"><strong>Quiz Code:</strong> {{ quiz.quiz_code }}</p>
+
+        <h3 class="mt-4 text-info">Questions</h3>
+        <ul class="list-group mt-3">
+            {% for question in questions %}
+                <li class="list-group-item bg-dark text-light border-light p-3 rounded mb-3">
+                    <h5 class="fw-bold">{{ forloop.counter }}. {{ question.question_text }}</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>🔹 <strong>Option 1:</strong> {{ question.option1 }}</p>
+                            <p>🔹 <strong>Option 2:</strong> {{ question.option2 }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>🔹 <strong>Option 3:</strong> {{ question.option3 }}</p>
+                            <p>🔹 <strong>Option 4:</strong> {{ question.option4 }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                            <p class="text-warning"><strong>✔ Correct Answer:</strong> {{ question.correct_option }}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

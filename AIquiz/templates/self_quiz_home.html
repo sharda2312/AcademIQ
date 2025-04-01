@@ -1,0 +1,86 @@
+{% extends 'nav.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: #1e2430;
+        font-family: 'Poppins', sans-serif;
+        color: white;
+        text-align: center;
+    }
+
+    .container {
+        margin-top: 5%;
+    }
+
+
+    .hero-section:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-title {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+
+    .steps-container {
+        margin-top: 40px;
+    }
+
+    .step {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px auto;
+        max-width: 500px;
+        font-size: 1.1em;
+        transition: 0.3s ease-in-out;
+    }
+
+    .step:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(36, 30, 30, 0.2);
+    }
+
+    .generate-btn {
+        background: #242222;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.3em;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        margin-top: 20px;
+    }
+
+    .generate-btn:hover {
+        background: #392f2c;
+        transform: scale(1.05);
+    }
+
+</style>
+
+<div class="container">
+        <h1 class="hero-title">🚀 Generate Quiz with AI</h1>
+        <p class="hero-subtitle">Generate quizzes tailored to your learning needs in seconds!</p>
+
+        <div class="steps-container">
+            <div class="step">📌 Step 1: Click on "Generate Quiz"</div>
+            <div class="step">📝 Step 2: Enter your quiz preferences (subject, difficulty, etc.)</div>
+            <div class="step">🧠 Step 3: Attempt the quiz & challenge yourself</div>
+            <div class="step">📊 Step 4: Get instant results & insights!</div>
+        </div>
+        <a href="{%url 'ai-create-quiz'%}"><button class="generate-btn">🎯 Generate Quiz</button></a>
+        
+</div>
+
+{% endblock %}

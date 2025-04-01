@@ -1,6 +1,7 @@
 {% extends 'nav.html' %}
 
 {% block content %}
+
 <div class="container mt-4 text-light">
     <div class="card bg-dark text-light shadow-lg p-4 rounded">
         <h2 class="text-center fw-bold">{{ quiz.title }} - Result</h2>
@@ -11,6 +12,7 @@
             <p class="fs-5"><strong>Marking Scheme:</strong> {{ quiz.marking_scheme }}</p>
             <p class="fs-5"><strong>Obtained Marks:</strong> {{ result.obtained_marks }}</p>
         </div>
+        <p class="fs-5"><strong>Quiz Code:</strong> {{ quiz.quiz_code }}</p>
 
         <h3 class="mt-4 text-info">Review Answers</h3>
         <ul class="list-group mt-3">

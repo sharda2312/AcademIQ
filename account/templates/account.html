@@ -209,32 +209,61 @@
     </div>
 
     <div class="info-card">
-      <h3>Quiz History</h3>
+      <h3>created Quizes</h3>
       <div class="quiz-grid">
-        {% if quizs %} {% for q in quizs|slice:":2" %}
+        {% if created_quiz %} {% for q in created_quiz|slice:":3" %}
         <a
-          href="{% url 'result' q.quiz.quiz_code %}"
+          href="{% url 'questions' q.quiz_code %}"
           style="text-decoration: none"
         >
           <button class="btn btn-light quiz-item">
-            <span class="quiz-item-title">{{ q.quiz.title }}</span>
+            <span class="quiz-item-title">{{ q.title }}</span>
             <span class="quiz-score"
-              >{{ q.obtained_marks }}/{{ q.total_marks }}</span
+              >{{ q.quiz_code }}</span
             >
           </button>
         </a>
         {% endfor %} {% else %}
         <div class="quiz-item">
-          <span class="quiz-item-title">No quiz attempts yet</span>
+          <span class="quiz-item-title">No quiz created</span>
         </div>
         {% endif %}
         <div style="display: flex; justify-content: end;">
-            <a href="{% url 'all_attempted_quiz' %}" style="text-decoration: none; color: #ffffff;" >
+            <a href="{% url 'all_created_quiz' %}" style="text-decoration: none; color: #ffffff;" >
                 <button class="btn btn-outline-light btn-small">View All</button>
             </a>
         </div>
         
       </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h3>Attempted Quizes</h3>
+    <div class="quiz-grid">
+      {% if quizs %} {% for q in quizs|slice:":3" %}
+      <a
+        href="{% url 'result' q.quiz.quiz_code %}"
+        style="text-decoration: none"
+      >
+        <button class="btn btn-light quiz-item">
+          <span class="quiz-item-title">{{ q.quiz.title }}</span>
+          <span class="quiz-score"
+            >{{ q.obtained_marks }}/{{ q.total_marks }}</span
+          >
+        </button>
+      </a>
+      {% endfor %} {% else %}
+      <div class="quiz-item">
+        <span class="quiz-item-title">No quiz attempts yet</span>
+      </div>
+      {% endif %}
+      <div style="display: flex; justify-content: end;">
+          <a href="{% url 'all_attempted_quiz' %}" style="text-decoration: none; color: #ffffff;" >
+              <button class="btn btn-outline-light btn-small">View All</button>
+          </a>
+      </div>
+      
     </div>
   </div>
 

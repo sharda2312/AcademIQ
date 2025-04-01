@@ -9,7 +9,7 @@ from django.utils.timezone import now
 def join_quiz_view(request):
     if request.method == "POST":
         quiz_code = request.POST.get("quiz_code")
-
+        
         # Check if quiz exists
         quiz = Quiz.objects.filter(quiz_code=quiz_code).first()
         if not quiz:
@@ -28,7 +28,7 @@ def quiz_view(request, quiz_code):
     positive_marks = int(quiz.marking_scheme.split(",")[0].strip("+"))
     total_marks = positive_marks * question_count
 
-    return render(request, 'quiz.html', {
+    return render(request, 'quiz_info.html', {
         'quiz': quiz,
         'question_count': question_count,
         'total_marks': total_marks
@@ -72,13 +72,8 @@ def create_manual_quiz(request):
         quiz_title = request.POST.get("title")
         time_limit = request.POST.get("time_limit")
         marking_scheme = request.POST.get("marking_scheme")
-
-        # Create the quiz
-        quiz = Quiz.objects.create(
-            title=quiz_title,
-            time_limit=time_limit,
-            marking_scheme=marking_scheme
-        )
+        
+        user = request.user
 
         # Loop through questions (assuming frontend submits multiple questions)
         question_texts = request.POST.getlist("question_text[]")  
@@ -88,6 +83,14 @@ def create_manual_quiz(request):
         options4 = request.POST.getlist("option4[]")
         correct_options = request.POST.getlist("correct_option[]")
 
+        # Create the quiz
+        quiz = Quiz.objects.create(
+            title=quiz_title,
+            time_limit=time_limit,
+            marking_scheme=marking_scheme,
+            question_count=len(question_texts)
+        )
+        
         for i in range(len(question_texts)):
             Question.objects.create(
                 quiz=quiz,
@@ -162,3 +165,15 @@ def submit_quiz(request, quiz_code):
 
     return redirect('result', quiz_code=quiz_code)
 
+@login_required
+def quiz_questions(request, quiz_code):
+    user = request.user
+    
+    quiz = Quiz.objects.get(quiz_code=quiz_code)
+    postive_mark = int(quiz.marking_scheme.split(',')[0].strip('+'))
+    max_mark = postive_mark*Question.objects.filter(quiz_id = quiz.id).count()
+    questions = Question.objects.filter(quiz_id = quiz.id)
+    
+    return render(request, "quiz_questions.html",{"quiz":quiz, "questions":questions, "max_mark":max_mark})
+    
+    

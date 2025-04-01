@@ -10,9 +10,6 @@
         #timer{
             color:red;
         }
-        .quiz{
-            margin-left: 10%;
-        }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -74,11 +71,11 @@
             <p>Time Limit: {{ quiz.time_limit }} Min, <span id="timer">{{ quiz.time_limit }}:00 </span> </p>
         </div>
         <hr>
-        <div class="quiz">
+        <div class="quiz list-group mt-3">
             <form id="quiz-form" method="POST" action="{% url 'submit_quiz' quiz.quiz_code %}">
                 {% csrf_token %}
                 {% for question in questions %}
-                    <div class="mb-4">
+                    <div class="list-group-item bg-dark text-light border-light p-3 rounded mb-3">
                         <h5>{{ forloop.counter }}. {{ question.question_text }}</h5>
                         <div class="form-check">
                             <input type="radio" name="q{{ question.id }}" value="1" class="form-check-input">

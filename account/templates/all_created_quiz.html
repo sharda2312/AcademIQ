@@ -1,0 +1,77 @@
+{% extends 'nav.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: #1e2430;
+        font-family: 'Poppins', sans-serif;
+    }
+    .container {
+        margin-top: 5%;
+        display: flex;
+        justify-content: center;
+        text-align: left;
+        color: white;
+    }
+    .quiz-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        width: 90%;
+        max-width: 1200px;
+    }
+    .quiz-item {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+        transition: 0.3s ease;
+        color: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .quiz-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(71, 59, 59, 0.1 );
+    }
+    .quiz-item-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #ffb347;
+        margin-bottom: 10px;
+    }
+    .quiz-info span {
+        display: block;
+        font-size: 0.95em;
+        margin: 4px 0;
+    }
+    .no-quiz {
+        text-align: center;
+        padding: 50px;
+        font-size: 1.3em;
+        color: #ff6b6b;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        width: 100%;
+    }
+</style>
+
+<div class="container">
+    <div class="quiz-list">
+        {% if quiz %}
+            {% for q in quiz %}
+            <div class="quiz-item">
+                <div class="quiz-item-title">📌 {{ q.title }}</div>
+                <div class="quiz-info">
+                    <span>⏳ Time Limit: <b>{{ q.time_limit }}</b> mins</span>
+                    <span>🔢 Total Questions: <b>{{ q.question_count }}</b></span>
+                    <span>🆔 Quiz Code: <b>{{ q.quiz_code }}</b></span>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-quiz">
+                🚫 No quiz created yet!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

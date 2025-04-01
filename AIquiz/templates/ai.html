@@ -58,6 +58,23 @@
     .add-question-btn i {
         margin-right: 5px;
     }
+
+    .remove-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: transparent;
+        border: none;
+        font-size: 1em;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .remove-btn:hover {
+        transform: scale(1.2);
+    }
+    .question-card {
+        position: relative;
+    }
 </style>
 
 <div class="container text-white">
@@ -91,7 +108,8 @@
         <div id="questions-container">
             {% for question in questions %}
             <div class="question-card">
-                <h5 class="fw-bold">{{ forloop.counter }}️⃣ Question</h5>
+                <button type="button" class="remove-btn" onclick="removeQuestion(this)">❌</button>
+                <h5 class="fw-bold">Question <span class="question-number">{{ forloop.counter }}</span>️⃣</h5>
 
                 <div class="mb-3">
                     <label class="form-label">✏️ Enter Question</label>
@@ -133,44 +151,59 @@
     let questionCount = document.querySelectorAll('.question-card').length || 0;
 
     function addQuestion() {
-        questionCount++;
-        let container = document.getElementById("questions-container");
-        let newQuestion = document.createElement("div");
-        newQuestion.classList.add("question-card");
-        newQuestion.innerHTML = `
-            <h5 class="fw-bold">${questionCount}️⃣ Question</h5>
-            <div class="mb-3">
-                <label class="form-label">✏️ Enter Question</label>
-                <input type="text" class="form-control" name="question_text[]" placeholder="Type your question here" required>
+    questionCount++;
+    let container = document.getElementById("questions-container");
+    let newQuestion = document.createElement("div");
+    newQuestion.classList.add("question-card");
+    newQuestion.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeQuestion(this)">❌</button>
+        <h5 class="fw-bold">Question <span class="question-number">${questionCount}</span>️⃣</h5>
+        <div class="mb-3">
+            <label class="form-label">✏️ Enter Question</label>
+            <input type="text" class="form-control" name="question_text[]" placeholder="Type your question here" required>
+        </div>
+        <div class="row">
+            <div class="col-md-6 d-flex align-items-center mb-2">
+                <h5 class="me-2">1.</h5>
+                <input type="text" class="form-control mb-2" name="option1[]" placeholder="Option 1" required>
             </div>
-            <div class="row">
-                <div class="col-md-6 d-flex align-items-center mb-2">
-                    <h5 class="me-2">1.</h5>
-                    <input type="text" class="form-control mb-2" name="option1[]" placeholder="Option 1" required>
-                </div>
-                <div class="col-md-6 d-flex align-items-center mb-2">
-                    <h5 class="me-2">2.</h5>                    
-                    <input type="text" class="form-control mb-2" name="option2[]" placeholder="Option 2" required>
-                </div>
-                <div class="col-md-6 d-flex align-items-center mb-2">
-                    <h5 class="me-2">3.</h5>  
-                    <input type="text" class="form-control mb-2" name="option3[]" placeholder="Option 3" required>
-                </div>
-                <div class="col-md-6 d-flex align-items-center mb-2">
-                    <h5 class="me-2">4.</h5>  
-                    <input type="text" class="form-control mb-2" name="option4[]" placeholder="Option 4" required>
-                </div>
+            <div class="col-md-6 d-flex align-items-center mb-2">
+                <h5 class="me-2">2.</h5>                    
+                <input type="text" class="form-control mb-2" name="option2[]" placeholder="Option 2" required>
             </div>
-            <label class="form-label">✅ Select Correct Option</label>
-            <select class="form-select mb-3" name="correct_option[]" required>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-        `;
-        container.appendChild(newQuestion);
-    }
+            <div class="col-md-6 d-flex align-items-center mb-2">
+                <h5 class="me-2">3.</h5>  
+                <input type="text" class="form-control mb-2" name="option3[]" placeholder="Option 3" required>
+            </div>
+            <div class="col-md-6 d-flex align-items-center mb-2">
+                <h5 class="me-2">4.</h5>  
+                <input type="text" class="form-control mb-2" name="option4[]" placeholder="Option 4" required>
+            </div>
+        </div>
+        <label class="form-label">✅ Select Correct Option</label>
+        <select class="form-select mb-3" name="correct_option[]" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+    `;
+    container.appendChild(newQuestion);
+    reindexQuestions();
+}
+function removeQuestion(btn) {
+    btn.closest('.question-card').remove();
+    reindexQuestions();
+}
+
+function reindexQuestions() {
+    let cards = document.querySelectorAll('.question-card');
+    cards.forEach((card, index) => {
+        card.querySelector('.question-number').innerText = index + 1;
+    });
+    questionCount = cards.length;
+}
+
 </script>
 
 {% endblock %}

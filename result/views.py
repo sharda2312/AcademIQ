@@ -18,9 +18,3 @@ def result_view(request, quiz_code):
         'answers': answers,
     })
     
-@login_required   
-def all_attempted_quiz(request):
-    user = request.user
-    quiz = QuizResult.objects.filter(user=user)
-    print(quiz)
-    return render(request, 'all_attempted_quiz.html', {"quiz": quiz})
