@@ -58,6 +58,7 @@
     <div class="quiz-list">
         {% if quiz %}
             {% for q in quiz %}
+            <a href="{% url 'questions' q.quiz_code %}" style="text-decoration: none">
             <div class="quiz-item">
                 <div class="quiz-item-title">📌 {{ q.title }}</div>
                 <div class="quiz-info">
@@ -65,7 +66,8 @@
                     <span>🔢 Total Questions: <b>{{ q.question_count }}</b></span>
                     <span>🆔 Quiz Code: <b>{{ q.quiz_code }}</b></span>
                 </div>
-            </div>
+                
+            </div></a>
             {% endfor %}
         {% else %}
             <div class="no-quiz">

@@ -4,7 +4,7 @@ import string
 from authapp.models import User
 
 class Quiz(models.Model):
-    title = models.CharField(max_length=200, default="self")
+    title = models.CharField(max_length=50, default="self")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     time_limit = models.PositiveIntegerField(help_text="Time limit in minutes", default=10)
     created_at = models.DateTimeField(auto_now_add=True)

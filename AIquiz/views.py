@@ -31,7 +31,7 @@ def ai_quiz(request):
                 "role": "user",
                 "content": f"""Generate {question_count} {level} level multiple-choice questions for {grade} grade students on the topic of {topics}. 
                 Ensure the questions vary in type, including definitions, applications, and analyses, 
-                and span a range of difficulty levels from easy to challenging, and question should be in context of india. 
+                and span a range of difficulty levels from easy to challenging, student is indian. 
                 in json in the correct key value pair write the postion of the correct ans like if the first ans is correct write 1.
                 json format should be
                     "question": "What do plants use from the sun to make their own food?",
@@ -52,11 +52,35 @@ def ai_quiz(request):
     ai_response = chat_completion.choices[0].message.content
     return ai_response
     
+@csrf_protect
+@login_required
+def AI_create_quiz(request):
+    if request.method == "POST":
+        question_count = request.POST.get('questions_count')
+        level = request.POST.get('level')
+        grade = request.POST.get('grade')
+        topics = request.POST.get('topics')
+        model = request.POST.get('model')
+        
+        context = {
+            "question_count": question_count,
+            "grade": grade,
+            "topics" : topics,
+            "model": model,
+            "level": level,
+        }
+        
+        request.session['quiz_context'] = context
+        
+        return redirect('ai')
+    
+    return render(request, 'AI_create_quiz.html')
+
 
 # Create your views here.
 @csrf_protect
 @login_required
-def AI_create_quiz(request):
+def self_AI_create_quiz(request):
     if request.method == "POST":
         question_count = request.POST.get('questions_count')
         level = request.POST.get('level')
@@ -149,10 +173,8 @@ def self_attempt_quiz(request):
     """ Display AI-generated quiz and save user responses """
     
     if request.method == "GET":
-        # Check if questions are already stored in session
-        questions_data = request.session.get('quiz_questions')
 
-        if not questions_data:
+        if not False:
             ai_response = ai_quiz(request)  # Generate quiz once
             try:
                 match = re.search(r"\[\s*{.*}\s*\]", ai_response, re.DOTALL)
@@ -176,6 +198,10 @@ def self_attempt_quiz(request):
 
         # Retrieve stored quiz questions
         questions_data = request.session.get('quiz_questions')
+        if questions_data:
+            del request.session['quiz_questions']
+            request.session.modified = True
+
         if not questions_data:
             return HttpResponse("Quiz questions not found in session", status=500)
 
@@ -219,7 +245,5 @@ def self_attempt_quiz(request):
             obtained_marks=obtained_marks
         )
 
-        # Clear quiz session data to prevent reuse
-        del request.session['quiz_questions']
-
-        return render(request, "create_quiz_success.html", {"quiz_code": quiz.quiz_code})
+        return redirect('result', quiz_code=quiz.quiz_code)
+ 

@@ -56,13 +56,15 @@
     <div class="quiz-list">
         {% if quiz %}
             {% for q in quiz %}
+            <a href="{% url 'result' q.quiz.quiz_code %}" style="text-decoration: none">
             <div class="quiz-item">
                 <div class="quiz-item-title">📌 {{ q.quiz.title }}</div>
                 <div class="quiz-info">
                     <span>✅ Obtained Marks: <b>{{ q.obtained_marks }}</b> </span>
                     <span>📊 Total Marks: <b>{{ q.total_marks }}</b></span>
                 </div>
-            </div>
+                
+            </div></a>
             {% endfor %}
         {% else %}
             <div class="no-quiz">
