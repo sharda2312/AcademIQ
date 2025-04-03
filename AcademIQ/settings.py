@@ -32,7 +32,7 @@ DEBUG = True
 AUTH_USER_MODEL = 'authapp.User'  # ✅ Use your custom user model
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
 STATIC_URL = "static/"
 
