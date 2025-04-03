@@ -2,3 +2,4 @@ Django>=4.2,<5.0
 mysqlclient>=2.2.0
 gunicorn>=21.2.0
 groq>=0.18.0
+python-dotenv>=1.1.0
