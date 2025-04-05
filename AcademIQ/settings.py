@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-hoxh^^3k!va5-_j7gbvm5guu^ep9#1c9hdyao=ox#e_mvl5x#3"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 AUTH_USER_MODEL = 'authapp.User'  # ✅ Use your custom user model
 
