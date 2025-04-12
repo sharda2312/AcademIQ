@@ -48,6 +48,7 @@
         <!-- Login/Register or Logout Links -->
         <div class="navbar-nav ms-auto">
           {% if request.session.user_name %}
+          <a class="nav-link fw-bold fs-5" href="{% url 'account' %}">My Dashboard</a>
           <a class="nav-link fw-bold fs-5" href="{% url 'logout' %}">Logout</a>
           {% else %}
           <a class="nav-link fw-bold fs-5" href="{% url 'login' %}">Login</a>

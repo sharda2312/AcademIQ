@@ -65,6 +65,26 @@
             font-size: 1.2em;
             margin-top: 13px;
         }
+        /* Loading Spinner Styles */
+        .spinner-container {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        .loading-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #eee;
+        }
+        /* Dim Form During Loading */
+        .form-dimmed {
+            opacity: 0.6;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -86,11 +106,11 @@
             <div class="mb-3 password-container">
                 <label class="form-label" for="password">Password</label>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
-                <span class="password-toggle" onclick="togglePassword()">👁️</span>
+                <span class="password-toggle" onclick="togglePassword('password')">👁️</span>
                 <div class="invalid-feedback">Password is required.</div>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Sign in</button>
+            <button type="submit" id="loginButton" class="btn btn-primary w-100">Sign in</button>
 
             <!-- Register Link -->
             <div class="text-center mt-3">
@@ -98,14 +118,95 @@
             </div>
         </form>
         
+        <!-- Loading Spinner Element -->
+        <div id="spinnerContainer" class="spinner-container">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="loading-text">Logging in, please wait...</p>
+        </div>
+        
         <p id="responseMessage" class="text-center mt-3"></p>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- JavaScript File -->
-    <script src="{% static 'js/login.js' %}"></script>
+    <!-- JavaScript File (Replaced inline for this example) -->
+    <script>
+         window.togglePassword = function (fieldId) {
+        const input = document.getElementById(fieldId);
+        const toggleBtn = input.nextElementSibling;
+        
+        if (input.type === "password") {
+            input.type = "text";
+            toggleBtn.textContent = "🙈";
+        } else {
+            input.type = "password";
+            toggleBtn.textContent = "👁️";
+        }
+    };
+        
+        // Show loading spinner and hide it when done
+        function showLoading() {
+            document.getElementById("loginForm").classList.add("form-dimmed");
+            document.getElementById("spinnerContainer").style.display = "block";
+            document.getElementById("loginButton").disabled = true;
+        }
+        
+        function hideLoading() {
+            document.getElementById("loginForm").classList.remove("form-dimmed");
+            document.getElementById("spinnerContainer").style.display = "none";
+            document.getElementById("loginButton").disabled = false;
+        }
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let responseMessage = document.getElementById("responseMessage");
+
+            if (!email || !password) {
+                responseMessage.textContent = "All fields are required!";
+                responseMessage.style.color = "red";
+                return;
+            }
+            
+            // Show loading spinner
+            showLoading();
+
+            fetch("/login/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: new URLSearchParams(new FormData(this))
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading spinner
+                hideLoading();
+                
+                responseMessage.textContent = data.message;
+                responseMessage.style.color = data.status === "success" ? "green" : "red";
+
+                if (data.status === "success") {
+                    responseMessage.textContent = "Login successful! Redirecting...";
+                    window.location.href = data.redirect_url; // Redirect after successful login
+                }
+            })
+            .catch(error => {
+                // Hide loading spinner even on error
+                hideLoading();
+                
+                responseMessage.textContent = "Login failed. Please try again.";
+                responseMessage.style.color = "red";
+                console.error("Login error:", error);
+            });
+        });
+    </script>
 
 </body>
 </html>
