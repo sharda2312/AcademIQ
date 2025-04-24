@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+from whitenoise.storage import CompressedManifestStaticFilesStorage
+
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -36,6 +39,15 @@ ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Add WhiteNoise-specific settings
+WHITENOISE_AUTOREFRESH = False  # Set to True only in development
+WHITENOISE_USE_FINDERS = False  # Set to True only in development
+WHITENOISE_MANIFEST_STRICT = True
+WHITENOISE_COMPRESS = True  # Enable compression
+WHITENOISE_COMPRESS_TIMEOUT = 60  # Compression timeout in seconds
 
 LOGIN_URL = '/login/'
 
@@ -95,12 +107,18 @@ WSGI_APPLICATION = "AcademIQ.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv("MYSQL_ADDON_DB"),  # Replace with your database name
-        'USER': os.getenv("MYSQL_ADDON_USER"),          # Default XAMPP username
-        'PASSWORD': os.getenv("MYSQL_ADDON_PASSWORD"),          # Leave empty if no password is set in XAMPP
-        'HOST': os.getenv("MYSQL_ADDON_HOST"),     # Use 'localhost' or '127.0.0.1'
-        'PORT': '3306'
+        'ENGINE': 'dj_db_conn_pool.backends.mysql',
+        'NAME': os.getenv("MYSQL_ADDON_DB"),  
+        'USER': os.getenv("MYSQL_ADDON_USER"),     
+        'PASSWORD': os.getenv("MYSQL_ADDON_PASSWORD"),         
+        'HOST': os.getenv("MYSQL_ADDON_HOST"),     
+        'PORT': '3306',
+        'POOL_OPTIONS': {  # Add connection pool options
+            'POOL_SIZE': 20,  # Number of connections to keep open
+            'MAX_OVERFLOW': 10,  # Max number of additional connections to open if needed
+            'POOL_TIMEOUT': 30,  # Seconds to wait before timeout error when pool is full
+            'POOL_RECYCLE': 1800,  # Seconds before a connection is recycled (30 minutes)
+        }
     }
 }
 
@@ -137,7 +155,7 @@ USE_TZ = True
 # Session Settings
 SESSION_COOKIE_AGE = 86400  #  24 hours
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_SAVE_EVERY_REQUEST = True
+SESSION_SAVE_EVERY_REQUEST = False
     
 
 # Default primary key field type
