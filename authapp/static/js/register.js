@@ -35,7 +35,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmPasswordInput = document.getElementById("confirm_password");
     
     // Get CSRF token - CORRECTED from 'csrfmiddlewareware' to 'csrfmiddlewaretoken'
-    const csrfToken = document.querySelector("input[name='csrfmiddlewaretoken']").value;
+    const csrfTokenInput = document.querySelector("input[name='csrfmiddlewaretoken']");
+    const csrfToken = csrfTokenInput ? csrfTokenInput.value : null;
+
+    if (!csrfToken) {
+        console.error("CSRF token not found! Form submission may fail.");
+    }
+
     
     // Add error handling for CSRF token retrieval
     if (!csrfToken) {

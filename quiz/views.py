@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render,HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Quiz, Question, QuizResult, UserAnswer
 from django.http  import JsonResponse
@@ -13,7 +13,7 @@ def join_quiz_view(request):
         # Check if quiz exists
         quiz = Quiz.objects.filter(quiz_code=quiz_code).first()
         if not quiz:
-            return JsonResponse({"status": "error", "message": "Invalid quiz code."})
+            return HttpResponse("Invalid quiz code.")
 
         # Redirect to quiz details page
         return redirect('quiz_view', quiz_code=quiz_code)

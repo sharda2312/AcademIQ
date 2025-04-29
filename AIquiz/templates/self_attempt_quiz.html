@@ -47,6 +47,7 @@
         <hr>
         <div class="quiz list-group mt-3">
             <form id="quiz-form" method="POST">
+                <meta name="referrer" content="same-origin">
                 {% csrf_token %}
                 {% for question in questions %}
                     <div class="list-group-item bg-dark text-light border-light p-3 rounded mb-3">

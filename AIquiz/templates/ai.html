@@ -82,6 +82,7 @@
     <div style="display: flex; justify-content: center;"><p>You can also make chnages to the Questions and Add Questions Manually.</p></div>
     
     <form method="POST">
+        <meta name="referrer" content="same-origin">
         {% csrf_token %}
         <div class="mb-3">
             <label class="form-label">📌 Quiz Title</label>

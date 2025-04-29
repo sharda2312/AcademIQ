@@ -1,19 +1,21 @@
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate,login, logout
 import json
 from .models import User
 
+
+@csrf_protect
 def signup_view(request):
     return render(request, 'register.html')
-
+@csrf_protect
 def logout_view(request):
     if 'user_name' in request.session:
         logout(request)
     return redirect("landing")
-
+@csrf_protect
 def check_email(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -23,7 +25,7 @@ def check_email(request):
         return JsonResponse({"status": "success"})
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
 
-
+@csrf_protect
 def register_user(request):
     if request.method == "POST":
         try:
@@ -58,7 +60,7 @@ def register_user(request):
     
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
 
-
+@csrf_protect
 def login_view(request):
     if request.method == 'POST':
         email = request.POST['email']

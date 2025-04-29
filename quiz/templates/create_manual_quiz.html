@@ -136,6 +136,7 @@ function reindexQuestions() {
 <div class="container text-white">
     <h1 class="fw-bold text-center mb-4">✍️ Create Manual Quiz</h1>
     <form method="POST">
+        <meta name="referrer" content="same-origin">
         {% csrf_token %}
         <div class="mb-3">
             <label class="form-label">📌 Quiz Title</label>
