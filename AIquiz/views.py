@@ -61,7 +61,7 @@ def generate_quiz_questions(context):
             questions_data = json.loads(json_string)  # Convert to Python list
             return {"success": True, "data": questions_data}, 200
         else:
-            return {"success": False, "error": "Could not extract JSON from AI response"}, 500
+            return {"success": False, "error": "Could not extract JSON from AI response. Check your topics for the quiz are  appropriate, else retry"}, 500
             
     except json.JSONDecodeError as e:
         return {"success": False, "error": f"Invalid JSON received from AI: {str(e)}"}, 500
