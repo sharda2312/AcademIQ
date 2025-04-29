@@ -34,18 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirm_password");
     
-    // Get CSRF token - CORRECTED from 'csrfmiddlewareware' to 'csrfmiddlewaretoken'
-    const csrfTokenInput = document.querySelector("input[name='csrfmiddlewaretoken']");
-    const csrfToken = csrfTokenInput ? csrfTokenInput.value : null;
-
-    if (!csrfToken) {
-        console.error("CSRF token not found! Form submission may fail.");
-    }
-
-    
-    // Add error handling for CSRF token retrieval
-    if (!csrfToken) {
-        console.error("CSRF token not found! Form submission may fail.");
+    // Get CSRF token using the Django-recommended approach
+    function getCsrfToken() {
+        return document.querySelector('input[name="csrfmiddlewaretoken"]').value;
     }
 
     // Real-time password match checking
@@ -70,9 +61,10 @@ document.addEventListener("DOMContentLoaded", function () {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken
+                "X-CSRFToken": getCsrfToken()
             },
-            body: JSON.stringify({ email })
+            body: JSON.stringify({ email }),
+            credentials: 'same-origin' // Important for CSRF token to be sent with request
         })
         .then(response => {
             // Check if response is ok before processing JSON
@@ -126,9 +118,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": csrfToken
+                    "X-CSRFToken": getCsrfToken()
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                credentials: 'same-origin' // Important for CSRF handling
             });
 
             // Add explicit check for response status
