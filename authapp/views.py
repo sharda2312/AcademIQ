@@ -14,7 +14,6 @@ def logout_view(request):
         logout(request)
     return redirect("landing")
 
-@csrf_exempt
 def check_email(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -25,7 +24,6 @@ def check_email(request):
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
 
 
-@csrf_exempt  # Disable CSRF for simplicity (Use CSRF token in production)
 def register_user(request):
     if request.method == "POST":
         try:
@@ -61,7 +59,6 @@ def register_user(request):
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
 
 
-@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         email = request.POST['email']
