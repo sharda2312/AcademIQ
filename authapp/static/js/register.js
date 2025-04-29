@@ -33,7 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const emailMsg = document.getElementById("emailMsg");
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirm_password");
+    
+    // Get CSRF token - CORRECTED from 'csrfmiddlewareware' to 'csrfmiddlewaretoken'
     const csrfToken = document.querySelector("input[name='csrfmiddlewaretoken']").value;
+    
+    // Add error handling for CSRF token retrieval
+    if (!csrfToken) {
+        console.error("CSRF token not found! Form submission may fail.");
+    }
 
     // Real-time password match checking
     function checkPasswordMatch() {
@@ -61,13 +68,21 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify({ email })
         })
-        .then(response => response.json())
+        .then(response => {
+            // Check if response is ok before processing JSON
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
             emailMsg.textContent = data.message;
             emailMsg.style.color = data.status === "error" ? "#ff6b6b" : "#51cf66";
         })
         .catch(error => {
             console.error("Email check error:", error);
+            emailMsg.textContent = "Error checking email availability. Please try again.";
+            emailMsg.style.color = "#ff6b6b";
         });
     });
 
@@ -110,6 +125,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: JSON.stringify(formData)
             });
 
+            // Add explicit check for response status
+            if (!response.ok) {
+                // Check specifically for CSRF errors
+                if (response.status === 403) {
+                    throw new Error("CSRF verification failed. Please refresh the page and try again.");
+                }
+                throw new Error("Server error: " + response.status);
+            }
+
             const data = await response.json();
 
             responseMessage.textContent = data.message;
@@ -126,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         } catch (error) {
             console.error("Registration error:", error);
-            responseMessage.textContent = "An error occurred during registration. Please try again.";
+            responseMessage.textContent = error.message || "An error occurred during registration. Please try again.";
             responseMessage.style.color = "#ff6b6b";
         } finally {
             hideLoading();
