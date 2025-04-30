@@ -18,12 +18,15 @@ def logout_view(request):
 @csrf_protect
 def check_email(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        email = data.get("email")
-        if User.objects.filter(email=email).exists():
-            return JsonResponse({"status": "error", "message": "Email already registered"}, status=400)
-        return JsonResponse({"status": "success"})
-    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
+        try:
+            data = json.loads(request.body)  # Parse JSON data
+            email = data.get("email")
+            if User.objects.filter(email=email).exists():
+                return JsonResponse({"status": "error", "message": "Email already registered"}, status=200)  # Use 200 for frontend handling
+            return JsonResponse({"status": "success"})
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
+    return JsonResponse({"status": "error", "message": "Invalid request"}, status=200)
 
 @csrf_protect
 def register_user(request):
@@ -42,7 +45,7 @@ def register_user(request):
 
             # Check if email already exists
             if User.objects.filter(email=email).exists():
-                return JsonResponse({"status": "error", "message": "Email already registered."}, status=400)
+                return JsonResponse({"status": "error", "message": "Email already registered."}, status=200)
 
             # Create the user
             user = User.objects.create(
