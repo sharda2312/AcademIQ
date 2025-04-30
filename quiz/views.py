@@ -1,10 +1,12 @@
 from django.shortcuts import render,HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
 from .models import Quiz, Question, QuizResult, UserAnswer
 from django.http  import JsonResponse
 from django.utils.timezone import now
 
 # Create your views here.
+@csrf_protect
 @login_required
 def join_quiz_view(request):
     if request.method == "POST":
@@ -20,7 +22,7 @@ def join_quiz_view(request):
 
     return render(request, 'join_quiz.html')
 
-
+@csrf_protect
 @login_required
 def quiz_view(request, quiz_code):
     quiz = get_object_or_404(Quiz, quiz_code=quiz_code)
@@ -34,7 +36,7 @@ def quiz_view(request, quiz_code):
         'total_marks': total_marks
     })
 
-
+@csrf_protect
 @login_required
 def attempt_quiz(request, quiz_code):
     quiz = get_object_or_404(Quiz, quiz_code=quiz_code)
@@ -57,15 +59,17 @@ def attempt_quiz(request, quiz_code):
         'total_marks': total_marks,
     })
 
-
+@csrf_protect
 @login_required
 def quiz_public_view(request):
     return render(request, 'quiz_public.html')
 
+@csrf_protect
 @login_required
 def quiz_self_view(request):
     return render(request, 'quiz_self.html')
 
+@csrf_protect
 @login_required
 def create_manual_quiz(request):
     if request.method == "POST":
@@ -108,7 +112,7 @@ def create_manual_quiz(request):
 
     return render(request, "create_manual_quiz.html")
 
-
+@csrf_protect
 @login_required
 def submit_quiz(request, quiz_code):
     quiz = get_object_or_404(Quiz, quiz_code=quiz_code)
@@ -165,6 +169,7 @@ def submit_quiz(request, quiz_code):
 
     return redirect('result', quiz_code=quiz_code)
 
+@csrf_protect
 @login_required
 def quiz_questions(request, quiz_code):
     user = request.user
