@@ -13,19 +13,24 @@
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            let quiz_code = "{{ quiz.code }}"; // Correctly assign the quiz code
-            let timeLimit = "{{ quiz.time_limit }}" * 60; // Convert minutes to seconds
+            // Timer Logic
+            let quiz_code = "{{ quiz.code }}";
+            let timeLimit = {{ quiz.time_limit }} * 60; // Remove quotes to ensure numeric value
             let startTime = sessionStorage.getItem(`quiz_${quiz_code}_start`);
-
+    
+            // Parse startTime as integer or initialize fresh
             if (!startTime) {
-                sessionStorage.setItem(`quiz_${quiz_code}_start`, Date.now());
                 startTime = Date.now();
+                sessionStorage.setItem(`quiz_${quiz_code}_start`, startTime);
+            } else {
+                startTime = parseInt(startTime, 10); // Explicit parsing
             }
     
             function updateTimer() {
                 let elapsed = Math.floor((Date.now() - startTime) / 1000);
                 let timeLeft = Math.max(timeLimit - elapsed, 0);
                 
+                // Format time display
                 let minutes = Math.floor(timeLeft / 60);
                 let seconds = timeLeft % 60;
                 document.getElementById("timer").innerText = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -33,32 +38,31 @@
                 if (timeLeft > 0) {
                     setTimeout(updateTimer, 1000);
                 } else {
-                    document.getElementById("quiz-form").submit();  // Auto-submit on timeout
+                    sessionStorage.removeItem(`quiz_${quiz_code}_start`); // Clear storage
+                    document.getElementById("quiz-form").submit();
                 }
             }
     
             updateTimer();
     
-            // Prevent going back
+            // Prevent back navigation
             history.pushState(null, null, location.href);
             window.onpopstate = function () {
                 history.pushState(null, null, location.href);
             };
-        });
-
-        document.addEventListener("DOMContentLoaded", function () {
-        const radioButtons = document.querySelectorAll('input[type="radio"]');
-
-        radioButtons.forEach(radio => {
-            radio.addEventListener('click', function () {
-                if (this.wasChecked) {
-                    this.checked = false;
-                }
-                radioButtons.forEach(r => r.wasChecked = false);
-                this.wasChecked = this.checked;
+    
+            // Radio Button Toggle Logic
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('click', function () {
+                    if (this.wasChecked) {
+                        this.checked = false;
+                    }
+                    radioButtons.forEach(r => r.wasChecked = false);
+                    this.wasChecked = this.checked;
+                });
             });
         });
-    });
     </script>
     
 </head>
