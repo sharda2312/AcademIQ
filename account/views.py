@@ -1,10 +1,12 @@
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+
 from authapp.models import User
 from quiz.models import QuizResult, Quiz
 
 # Create your views here.h
-
+@csrf_protect
 @login_required
 def account(request):
     user = request.user
@@ -19,13 +21,14 @@ def account(request):
     }
        
     return render(request, "account.html", context)
-
+@csrf_protect
 @login_required   
 def all_attempted_quiz(request):
     user = request.user
     quiz = QuizResult.objects.filter(user=user).order_by('-submitted_at')
     return render(request, 'all_attempted_quiz.html', {"quiz": quiz})
 
+@csrf_protect
 @login_required
 def all_created_quiz(request):
     user = request.user
